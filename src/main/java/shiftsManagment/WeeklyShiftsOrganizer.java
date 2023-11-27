@@ -5,16 +5,13 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import util.PrettyPrinter;
 import util.TimeCalculation;
 
 import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.HashMap;
 
-public class ShiftsSummarizer {
+public class WeeklyShiftsOrganizer {
 
     XSSFSheet sheet;
     int studioRowIndex = -1;
@@ -23,7 +20,7 @@ public class ShiftsSummarizer {
     HashMap<String, Integer> studiosPerEmployee = new HashMap<>();
     HashMap<String, Integer>[] countStudiosPerDay;
 
-    public ShiftsSummarizer(String filePath) {
+    public WeeklyShiftsOrganizer(String filePath) {
         try {
             FileReader fr = new FileReader(filePath);
             sheet = fr.getSheet();
@@ -64,11 +61,15 @@ public class ShiftsSummarizer {
                     cell = sheet.getRow(r).getCell(c);
                     if (cell != null) {
                         if (TimeCalculation.isHours(cell.toString())) {
-                            String workerName = sheet.getRow(r + 1).getCell(c).toString().replaceAll(" ", "");
+                            String workerName = sheet.getRow(r + 1).getCell(c).toString()
+                                                        .replaceAll(" ", "");
                             studiosPerEmployee.put(workerName, studiosPerEmployee.get(workerName) != null ?
                                     studiosPerEmployee.get(workerName) + 1 : 1);
 
-                            String studioName = sheet.getRow(r - 1).getCell(c).toString().replaceAll(" ", "");
+                            // TODO think what is going on with separate document
+
+                            String studioName = sheet.getRow(r - 1).getCell(c).toString()
+                                                        .replaceAll(" ", "");
                             currentDayStudioHash.put(studioName, currentDayStudioHash.get(studioName) != null ?
                                     currentDayStudioHash.get(studioName) + 1 : 1);
                         }

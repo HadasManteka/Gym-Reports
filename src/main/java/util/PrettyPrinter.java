@@ -9,11 +9,11 @@ public class PrettyPrinter {
 
     public static void printStudiosPerDay(HashMap[] studiosEachDay) {
         for (int dayIdx=0; dayIdx<studiosEachDay.length; dayIdx++) {
-            printHasWithTitle("day " + dayIdx + ": ", studiosEachDay[dayIdx]);
+            printHashWithTitle("day " + (dayIdx+1) + ": ", studiosEachDay[dayIdx]);
         }
     }
 
-    public static void printHasWithTitle(String title, HashMap hashResult) {
+    public static void printHashWithTitle(String title, HashMap hashResult) {
         out.println(title);
         printHashResult(hashResult);
         out.println();
