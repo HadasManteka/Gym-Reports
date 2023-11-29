@@ -9,12 +9,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.IOException;
 
-public class FileReader {
+public class ReadFromFile {
     XSSFWorkbook wb;
 
-    public FileReader(String path) throws IOException, InvalidFormatException {
-        OPCPackage fs = OPCPackage.open(new File("C:\\Users\\Hadas\\Desktop\\novShifts.xlsx"));
+    public ReadFromFile(String path) throws IOException, InvalidFormatException {
+        OPCPackage fs = OPCPackage.open(new File(path));
         wb = new XSSFWorkbook(fs);
+    }
+
+    public void close() {
+        try {
+            wb.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public XSSFSheet getSheet() {

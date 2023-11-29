@@ -1,6 +1,6 @@
 package shiftsManagment;
 
-import Files.FileReader;
+import Files.ReadFromFile;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -11,24 +11,27 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 
-public class WeeklyShiftsOrganizer extends OrganizationReport implements IReport{
+public class WeeklyShiftsOrganizer extends OrganizationReport{
 
     XSSFSheet sheet;
     int studioRowIndex = -1;
     int sundayColIndex = -1;
+    ReadFromFile fr;
 
     public WeeklyShiftsOrganizer(String filePath) {
         try {
-            FileReader fr = new FileReader(filePath);
+            fr = new ReadFromFile(filePath);
             sheet = fr.getSheet();
         } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
     public void calcAllPeriod() throws ParseException {
         calcWorkHoursOfEachEmployee();
         summarizeStudio();
+        fr.close();
     }
 
 

@@ -4,25 +4,29 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.HashMap;
 
-public class MonthlyShiftsOrganizer extends OrganizationReport implements IReport{
+public class MonthlyShiftsOrganizer extends OrganizationReport{
     File folder;
 
     public MonthlyShiftsOrganizer(String folderPath) {
         folder = new File(folderPath);
     }
 
+    @Override
     public void calcAllPeriod() throws ParseException {
 
-        String excelFilesLst[] = folder.list();
+        String[] excelFilesLst = folder.list();
 
-        for (int i=0; i<excelFilesLst.length; i++) {
-            WeeklyShiftsOrganizer weekOrg = new WeeklyShiftsOrganizer(excelFilesLst[i]);
-            weekOrg.calcAllPeriod();
+        for (int i = 0; i < excelFilesLst.length; i++) {
+            if (excelFilesLst[i].endsWith(".xlsx")) {
+                WeeklyShiftsOrganizer weekOrg = new WeeklyShiftsOrganizer(folder.getPath() +
+                        File.separator + excelFilesLst[i]);
+                weekOrg.calcAllPeriod();
 
-            weekOrg.getCountStudiosPerDay();
-            studiosPerEmployee = mixTwoIntHash(studiosPerEmployee, weekOrg.getStudiosPerEmployee());
-            hoursPerEmployeeMap = mixTwoDoubleHash(hoursPerEmployeeMap, weekOrg.getHoursPerEmployeeMap());
-            countStudiosPerDay = mixTwoIntArrayHash(countStudiosPerDay, weekOrg.getCountStudiosPerDay());
+                weekOrg.getCountStudiosPerDay();
+                studiosPerEmployee = mixTwoIntHash(studiosPerEmployee, weekOrg.getStudiosPerEmployee());
+                hoursPerEmployeeMap = mixTwoDoubleHash(hoursPerEmployeeMap, weekOrg.getHoursPerEmployeeMap());
+                countStudiosPerDay = mixTwoIntArrayHash(countStudiosPerDay, weekOrg.getCountStudiosPerDay());
+            }
         }
     }
 
@@ -47,7 +51,9 @@ public class MonthlyShiftsOrganizer extends OrganizationReport implements IRepor
                                                     HashMap<String, Double> secondHash) {
         secondHash.keySet().forEach(key-> {
             if (firstHash.containsKey(key)) {
-                firstHash.put(key, firstHash.get(key) + secondHash.get(key));
+                firstHash.replace(key, firstHash.get(key) + secondHash.get(key));
+            } else {
+                firstHash.put(key, secondHash.get(key));
             }
         });
 
