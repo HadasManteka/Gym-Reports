@@ -11,40 +11,23 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 
-public class WeeklyShiftsOrganizer {
+public class WeeklyShiftsOrganizer extends OrganizationReport implements IReport{
 
     XSSFSheet sheet;
     int studioRowIndex = -1;
     int sundayColIndex = -1;
-    HashMap<String, Double> hoursPerEmployeeMap = new HashMap<>();
-    HashMap<String, Integer> studiosPerEmployee = new HashMap<>();
-    HashMap<String, Integer>[] countStudiosPerDay;
 
     public WeeklyShiftsOrganizer(String filePath) {
         try {
             FileReader fr = new FileReader(filePath);
             sheet = fr.getSheet();
-            countStudiosPerDay = (HashMap<String, Integer>[]) new HashMap<?,?>[7];
         } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
         }
-
     }
 
-    public HashMap<String, Double> getHoursPerEmployeeMap() {
-        return hoursPerEmployeeMap;
-    }
-
-    public HashMap<String, Integer>[] getCountStudiosPerDay() {
-        return countStudiosPerDay;
-    }
-
-    public HashMap<String, Integer> getStudiosPerEmployee() {
-        return studiosPerEmployee;
-    }
-
-    public void calcAllReports() throws ParseException {
-        hoursOfWorkingPerEmployee();
+    public void calcAllPeriod() throws ParseException {
+        calcWorkHoursOfEachEmployee();
         summarizeStudio();
     }
 
@@ -79,7 +62,7 @@ public class WeeklyShiftsOrganizer {
         }
     }
 
-    public void hoursOfWorkingPerEmployee() throws ParseException {
+    public void calcWorkHoursOfEachEmployee() throws ParseException {
         XSSFRow row;
         XSSFCell cell;
         boolean keep = true;
