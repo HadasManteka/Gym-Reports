@@ -1,5 +1,10 @@
 package util;
 
+import entities.DayOfStudios;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class HashCalculator {
@@ -34,13 +39,7 @@ public class HashCalculator {
         return firstHash;
     }
 
-    public static HashMap<String, Integer>[] mixTwoIntArrayHash(HashMap<String, Integer>[] firstArrHash,
-                                                         HashMap<String, Integer>[] secondArrHash) {
-        for (int i=0; i<secondArrHash.length; i++) {
-            firstArrHash[i] = mixTwoIntHash(firstArrHash[i], secondArrHash[i]);
-        }
-
-        return firstArrHash;
+    public static void sortDaysArray(ArrayList<DayOfStudios> arrOfDays) {
+        arrOfDays.sort(Comparator.comparing(DayOfStudios::getDayNumber));
     }
-
 }

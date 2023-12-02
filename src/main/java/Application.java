@@ -1,17 +1,17 @@
 import shiftsManagment.MonthlyShiftsOrganizer;
 import shiftsManagment.OrganizationReport;
 import shiftsManagment.WeeklyShiftsOrganizer;
-import util.PrettyPrinter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.Scanner;
 
 public class Application {
 
     public static void main(String[] args) throws ParseException, IOException {
-        Scanner scan = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in, StandardCharsets.UTF_8);
         System.out.println("Month or week?\n" + 1 + " - week\n" + 2 + " - month\n");
         int periodChoice = scan.nextInt();
         scan.nextLine();

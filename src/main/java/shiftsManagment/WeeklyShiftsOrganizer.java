@@ -1,6 +1,7 @@
 package shiftsManagment;
 
 import Files.ReadFromFile;
+import entities.DayOfStudios;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -8,7 +9,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import util.TimeCalculation;
 
 import java.io.IOException;
+import java.lang.constant.DynamicCallSiteDesc;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WeeklyShiftsOrganizer extends OrganizationReport{
@@ -16,6 +19,7 @@ public class WeeklyShiftsOrganizer extends OrganizationReport{
     XSSFSheet sheet;
     int studioRowIndex = -1;
     int sundayColIndex = -1;
+    int sundayRowIndex = -1;
     ReadFromFile fr;
 
     public WeeklyShiftsOrganizer(String filePath) {
@@ -38,10 +42,14 @@ public class WeeklyShiftsOrganizer extends OrganizationReport{
     public void summarizeStudio() {
         XSSFCell cell;
 
-        if (studioRowIndex != -1) {
+        if (sundayColIndex == -1 || sundayRowIndex == -1) {
+            System.out.println("There is no sunday column in one of the files");
+        } else if (studioRowIndex == -1) {
+            System.out.println("Cant find the start of the studios");
+        } else {
             for (int c = sundayColIndex; c < 7 + sundayColIndex; c++) {
-                countStudiosPerDay[c-sundayColIndex] = new HashMap<>();
-                HashMap<String, Integer> currentDayStudioHash = countStudiosPerDay[c-sundayColIndex];
+
+                HashMap<String, Integer> currentDayStudioHash = new HashMap<>();
 
                 for (int r = studioRowIndex; r < sheet.getPhysicalNumberOfRows(); r++) {
                     cell = sheet.getRow(r).getCell(c);
@@ -56,10 +64,17 @@ public class WeeklyShiftsOrganizer extends OrganizationReport{
 
                             String studioName = sheet.getRow(r - 1).getCell(c).toString()
                                                         .replaceAll(" ", "");
-                            currentDayStudioHash.put(studioName, currentDayStudioHash.get(studioName) != null ?
+                            currentDayStudioHash.put(studioName,
+                                    currentDayStudioHash.get(studioName) != null ?
                                     currentDayStudioHash.get(studioName) + 1 : 1);
                         }
                     }
+                }
+
+                if (!currentDayStudioHash.isEmpty()) {
+                    String dayName = sheet.getRow(sundayRowIndex).getCell(c).toString();
+                    Integer dayNumber = (int)Double.parseDouble(sheet.getRow(sundayRowIndex - 2).getCell(c).toString());
+                    countStudiosPerDay.add(new DayOfStudios(dayNumber, dayName, currentDayStudioHash));
                 }
             }
         }
@@ -83,6 +98,7 @@ public class WeeklyShiftsOrganizer extends OrganizationReport{
                             studioRowIndex = r;
                         } else if (cell.toString().contains("ראשון")) {
                             sundayColIndex = c;
+                            sundayRowIndex = r;
                         } else if (cell.toString().contains("שבת")) {
                             saturdayColIndex = c;
                         } else if (TimeCalculation.isHours(cell.toString())) {
