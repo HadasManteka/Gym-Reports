@@ -35,5 +35,8 @@ public class Application {
             }
             default -> System.out.println("No such option");
         }
+
+        System.out.println("Press any key to exit.");
+        scan.nextLine();
     }
 }
