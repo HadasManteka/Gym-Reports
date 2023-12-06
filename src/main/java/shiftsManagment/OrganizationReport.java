@@ -30,11 +30,16 @@ public abstract class OrganizationReport implements IReport{
         return studiosPerEmployee.keySet().stream().mapToInt(emp -> studiosPerEmployee.get(emp)).sum();
     }
 
+    public double getTotalGymHours() {
+        return hoursPerEmployeeMap.keySet().stream().mapToDouble(emp -> hoursPerEmployeeMap.get(emp)).sum();
+    }
+
     public void printToFile(String path) throws IOException {
         String data = PrettyPrinter.printStudiosPerDay(getCountStudiosPerDay()) +
                 PrettyPrinter.printHashWithTitle("Hours of each employee: ", getHoursPerEmployeeMap()) +
                 PrettyPrinter.printHashWithTitle("Number of studios of each employee: ", getStudiosPerEmployee()) +
-                "Sum of studios " + getNumberOfStudiosSum();
+                "Total hours:  " + getTotalGymHours() + '\n' +
+                "Number of studios: " + getNumberOfStudiosSum();
         PrintToFile.write(path, data);
 
     }
