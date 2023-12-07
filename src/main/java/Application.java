@@ -1,3 +1,4 @@
+import Files.PrintToExcel;
 import shiftsManagment.MonthlyShiftsOrganizer;
 import shiftsManagment.OrganizationReport;
 import shiftsManagment.WeeklyShiftsOrganizer;
@@ -21,6 +22,7 @@ public class Application {
         switch (periodChoice) {
             case 1 -> {
                 System.out.println("Enter the path of the week excel");
+                //TODO: CHECK VALID PATH
                 path = scan.nextLine();
                 orgReport = new WeeklyShiftsOrganizer(path);
                 orgReport.calcAllPeriod();
@@ -32,6 +34,7 @@ public class Application {
                 orgReport = new MonthlyShiftsOrganizer(path);
                 orgReport.calcAllPeriod();
                 orgReport.printToFile(path + File.separator + "MonthReport.txt");
+                orgReport.printToExcel(path + File.separator + "GYM.xlsx");
             }
             default -> System.out.println("No such option");
         }

@@ -1,12 +1,16 @@
 package shiftsManagment;
 
+import Files.PrintToExcel;
 import Files.PrintToFile;
 import entities.DayOfStudios;
+import util.HashCalculator;
 import util.PrettyPrinter;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public abstract class OrganizationReport implements IReport{
 
@@ -41,6 +45,12 @@ public abstract class OrganizationReport implements IReport{
                 "Total hours:  " + getTotalGymHours() + '\n' +
                 "Number of studios: " + getNumberOfStudiosSum();
         PrintToFile.write(path, data);
+
+    }
+
+    public void printToExcel(String path) throws IOException {
+
+        PrintToExcel.write(path, HashCalculator.reshapeArrayMap((getCountStudiosPerDay())));
 
     }
 }

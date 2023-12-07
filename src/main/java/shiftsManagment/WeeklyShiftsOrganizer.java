@@ -27,7 +27,7 @@ public class WeeklyShiftsOrganizer extends OrganizationReport{
             fr = new ReadFromFile(filePath);
             sheet = fr.getSheet();
         } catch (IOException | InvalidFormatException e) {
-            e.printStackTrace();
+            System.out.println("Problem with reading: " + filePath);
         }
     }
 
