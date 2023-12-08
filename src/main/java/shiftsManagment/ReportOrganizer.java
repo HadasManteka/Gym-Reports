@@ -6,13 +6,11 @@ import entities.DayOfStudios;
 import util.HashCalculator;
 import util.PrettyPrinter;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-public abstract class OrganizationReport implements IReport{
+public abstract class ReportOrganizer implements IReport{
 
     HashMap<String, Double> hoursPerEmployeeMap = new HashMap<>();
     HashMap<String, Integer> studiosPerEmployee = new HashMap<>();
@@ -49,8 +47,10 @@ public abstract class OrganizationReport implements IReport{
     }
 
     public void printToExcel(String path) throws IOException {
-
-        PrintToExcel.write(path, HashCalculator.reshapeArrayMap((getCountStudiosPerDay())));
-
+        PrintToExcel printExcel = new PrintToExcel(path);
+        printExcel.createTableSheet(HashCalculator.reshapeArrayMap((getCountStudiosPerDay())), " Studios in month ");
+        printExcel.writeMap(getHoursPerEmployeeMap(), " Gym trainers ");
+        printExcel.writeMap(getStudiosPerEmployee(), " Studio trainers ");
+        printExcel.write();
     }
 }

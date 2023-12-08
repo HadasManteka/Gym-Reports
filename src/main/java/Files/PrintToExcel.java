@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -15,19 +16,25 @@ import java.util.Set;
 public class PrintToExcel {
 
     static XSSFWorkbook workbook = new XSSFWorkbook();
+    FileOutputStream out;
+    int sheetNum = 1;
 
-    public static void write(String path, Map<String, Object[]> data) throws IOException {
-        XSSFSheet spreadsheet = workbook.createSheet(" Gym Data ");
-        XSSFRow row;
-//        Map<String, Object[]> studentData
-//                = new TreeMap<String, Object[]>();
+    public PrintToExcel(String filePath) {
+        try {
+            out = new FileOutputStream(filePath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-        Set<String> keySet = data.keySet();
+    public void createTableSheet(Map<String, Object[]> data, String sheetName) throws IOException {
+        XSSFSheet spreadsheet = workbook.createSheet(sheetName);
 
-        int rowId = 1;
         XSSFRow headerRow = spreadsheet.createRow(0);
+        XSSFRow row;
+        Set<String> keySet = data.keySet();
+        int rowId = 1;
 
-        // writing the data into the sheets...
         for (String key : keySet) {
 
             row = spreadsheet.createRow(rowId++);
@@ -40,15 +47,45 @@ public class PrintToExcel {
                     cell = row.createCell(cellId);
                     cell.setCellValue(((StudioHoldsDays) objectArr[cellId]).getNumberOfStudio());
 
-                    cell = headerRow.createCell(cellId);
-                    cell.setCellValue(cellId + "-" + ((StudioHoldsDays) objectArr[cellId]).getDayName());
+                    if (cellId != 0) {
+                        cell = headerRow.createCell(cellId);
+                        cell.setCellValue(cellId + "-" + ((StudioHoldsDays) objectArr[cellId]).getDayName());
+                    }
                 }
             }
         }
 
-        // writing the workbook into the file...
-        FileOutputStream out = new FileOutputStream(new File(path));
-        workbook.write(out);
-        out.close();
+        sheetNum++;
     }
+
+    public void write() throws IOException {
+        workbook.write(out);
+        out.close();;
+    }
+
+
+    public void writeMap(Map<String, ? extends Object> data, String sheetName) {
+        XSSFSheet spreadsheet = workbook.createSheet(sheetName);
+        XSSFRow row;
+
+        Set<String> keySet = data.keySet();
+
+        int rowId = 0;
+        XSSFRow headerRow = spreadsheet.createRow(0);
+        int cellId;
+
+        // writing the data into the sheets...
+        for (String key : keySet) {
+            cellId = 0;
+            row = spreadsheet.createRow(rowId++);
+            Cell cell = row.createCell(cellId++);
+            cell.setCellValue(key);
+
+            cell = row.createCell(cellId);
+            cell.setCellValue(String.valueOf(data.get(key)));
+        }
+
+        sheetNum++;
+    }
+
 }

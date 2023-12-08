@@ -1,6 +1,5 @@
-import Files.PrintToExcel;
 import shiftsManagment.MonthlyShiftsOrganizer;
-import shiftsManagment.OrganizationReport;
+import shiftsManagment.ReportOrganizer;
 import shiftsManagment.WeeklyShiftsOrganizer;
 
 import java.io.File;
@@ -17,7 +16,7 @@ public class Application {
         int periodChoice = scan.nextInt();
         scan.nextLine();
         String path;
-        OrganizationReport orgReport;
+        ReportOrganizer orgReport;
 
         switch (periodChoice) {
             case 1 -> {

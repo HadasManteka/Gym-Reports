@@ -6,7 +6,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.Objects;
 
-public class MonthlyShiftsOrganizer extends OrganizationReport{
+public class MonthlyShiftsOrganizer extends ReportOrganizer {
     File folder;
 
     public MonthlyShiftsOrganizer(String folderPath) {

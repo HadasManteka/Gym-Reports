@@ -9,12 +9,10 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import util.TimeCalculation;
 
 import java.io.IOException;
-import java.lang.constant.DynamicCallSiteDesc;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class WeeklyShiftsOrganizer extends OrganizationReport{
+public class WeeklyShiftsOrganizer extends ReportOrganizer {
 
     XSSFSheet sheet;
     int studioRowIndex = -1;
