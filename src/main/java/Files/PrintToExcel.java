@@ -69,9 +69,7 @@ public class PrintToExcel {
         XSSFRow row;
 
         Set<String> keySet = data.keySet();
-
         int rowId = 0;
-        XSSFRow headerRow = spreadsheet.createRow(0);
         int cellId;
 
         // writing the data into the sheets...
