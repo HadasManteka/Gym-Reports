@@ -19,7 +19,7 @@ public class MonthlyShiftsOrganizer extends ReportOrganizer {
         String[] excelFilesLst = folder.list();
 
         for (int i = 0; i < Objects.requireNonNull(excelFilesLst).length; i++) {
-            if (excelFilesLst[i].endsWith(".xlsx")) {
+            if (excelFilesLst[i].endsWith(".xlsx") && !excelFilesLst[i].equals("GYM.xlsx")) {
                 WeeklyShiftsOrganizer weekOrg = new WeeklyShiftsOrganizer(folder.getPath() +
                         File.separator + excelFilesLst[i]);
                 weekOrg.calcAllPeriod();
@@ -32,5 +32,6 @@ public class MonthlyShiftsOrganizer extends ReportOrganizer {
         }
 
         HashCalculator.sortDaysArray(countStudiosPerDay);
+        hoursPerEmployeeMap = HashCalculator.sortHash(hoursPerEmployeeMap);
     }
 }

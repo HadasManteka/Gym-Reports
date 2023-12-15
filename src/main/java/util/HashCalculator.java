@@ -60,10 +60,29 @@ public class HashCalculator {
         }));
 
         return arrOfStudios;
-//        studentData.put(
-//                "1",
-//                new Object[] { "Roll No", "NAME", "Year" });
-
 //        arrOfDays.sort(Comparator.comparing(DayOfStudios::getDayNumber));
+    }
+
+    public static HashMap<String, Double> sortHash(HashMap<String, Double> map) {
+        Comparator<Object> valueComparator
+                = (e1, e2) -> {
+            if (e1.toString().contains("סופש")) {
+                return 1;
+            } else if (e2.toString().contains("סופש")) {
+                return -1;
+            }
+            return 0;
+        };
+
+        Object[] keys = map.keySet().toArray();
+        Arrays.sort(keys, valueComparator);
+        LinkedHashMap<String, Double> sortedByValue = new LinkedHashMap<>(map.size());
+
+        // copying entries from List to Map
+        for(Object key : keys) {
+            sortedByValue.put(key.toString(), map.get(key.toString()));
+        }
+
+        return sortedByValue;
     }
 }

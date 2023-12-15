@@ -2,10 +2,12 @@ package shiftsManagment;
 
 import Files.ReadFromFile;
 import entities.DayOfStudios;
+import enums.StudioGroupType;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import util.HashCalculator;
 import util.TimeCalculation;
 
 import java.io.IOException;
@@ -53,15 +55,14 @@ public class WeeklyShiftsOrganizer extends ReportOrganizer {
                     cell = sheet.getRow(r).getCell(c);
                     if (cell != null) {
                         if (TimeCalculation.isHours(cell.toString())) {
-                            String workerName = sheet.getRow(r + 1).getCell(c).toString()
-                                                        .replaceAll(" ", "");
+                            String workerName = sheet.getRow(r + 1).getCell(c).toString().trim();
                             studiosPerEmployee.put(workerName, studiosPerEmployee.get(workerName) != null ?
                                     studiosPerEmployee.get(workerName) + 1 : 1);
 
                             // TODO think what is going on with separate document
 
-                            String studioName = sheet.getRow(r - 1).getCell(c).toString()
-                                                        .replaceAll(" ", "");
+                            String studioName = StudioGroupType.getGroupTitle(sheet.getRow(r - 1)
+                                    .getCell(c).toString().trim());
                             currentDayStudioHash.put(studioName,
                                     currentDayStudioHash.get(studioName) != null ?
                                     currentDayStudioHash.get(studioName) + 1 : 1);
@@ -100,7 +101,7 @@ public class WeeklyShiftsOrganizer extends ReportOrganizer {
                         } else if (cell.toString().contains("שבת")) {
                             saturdayColIndex = c;
                         } else if (TimeCalculation.isHours(cell.toString())) {
-                            String workerName = sheet.getRow(r + 1).getCell(c).toString().replaceAll(" ", "");
+                            String workerName = sheet.getRow(r + 1).getCell(c).toString().trim();
                             double timeToAdd = TimeCalculation.calcTimeBetweenHours(cell.toString());
                             if (c == saturdayColIndex) {
                                 workerName = workerName + " - סופש";
