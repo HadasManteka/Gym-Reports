@@ -49,8 +49,8 @@ public abstract class ReportOrganizer implements IReport{
     public void printToExcel(String path) throws IOException {
         PrintToExcel printExcel = new PrintToExcel(path);
         printExcel.createTableSheet(HashCalculator.reshapeArrayMap((getCountStudiosPerDay())), " Studios in month ");
-        printExcel.writeMap(getHoursPerEmployeeMap(), " Gym trainers ");
-        printExcel.writeMap(getStudiosPerEmployee(), " Studio trainers ");
+        printExcel.writeMap(HashCalculator.adaptHash(getHoursPerEmployeeMap()), " Gym trainers ");
+        printExcel.writeMap(HashCalculator.adaptHash(getStudiosPerEmployee()), " Studio trainers ");
         printExcel.write();
     }
 }

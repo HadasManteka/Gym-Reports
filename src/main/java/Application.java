@@ -3,26 +3,20 @@ import shiftsManagment.ReportOrganizer;
 import shiftsManagment.WeeklyShiftsOrganizer;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.util.Scanner;
 
 public class Application {
 
-    public static void main(String[] args) throws ParseException, IOException {
+    static Scanner scan = new Scanner(System.in, StandardCharsets.UTF_8);
+
+    public static void main(String[] args) {
         try {
-            Scanner scan = new Scanner(System.in, StandardCharsets.UTF_8);
             System.out.println("Month or week?\n" + 1 + " - week\n" + 2 + " - month\n");
             int periodChoice = scan.nextInt();
             scan.nextLine();
-            String path;
+            String path = readPath();
             ReportOrganizer orgReport;
-            System.out.println("Enter the path");
-            path = scan.nextLine();
-            if (!new File(path).exists()) {
-                throw new Exception("Path not exists");
-            }
 
             switch (periodChoice) {
                 case 1 -> {
@@ -33,10 +27,12 @@ public class Application {
                 case 2 -> {
                     orgReport = new MonthlyShiftsOrganizer(path);
                     orgReport.calcAllPeriod();
-                    orgReport.printToFile(path + File.separator + "MonthReport.txt");
-                    orgReport.printToExcel(path + File.separator + "GYM.xlsx");
+                    String destPath = calcFileInDirectoryPath(path, "GYM.xlsx");
+                    orgReport.printToExcel(destPath);
+                    System.out.println("File saved in path: " + destPath);
                 }
-                default -> System.out.println("No such option");
+
+                default -> System.out.println("No such option, run program again");
             }
 
             System.out.println("Press any key to exit.");
@@ -44,5 +40,18 @@ public class Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String calcFileInDirectoryPath(String originPath, String fileName) {
+        return originPath + File.separator + fileName;
+    }
+
+    public static String readPath() throws Exception {
+        System.out.println("Enter the path");
+        String path = scan.nextLine();
+        if (!new File(path).exists()) {
+            throw new Exception("Path not exists");
+        }
+        return path;
     }
 }

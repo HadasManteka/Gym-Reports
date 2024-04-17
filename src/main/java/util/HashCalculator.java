@@ -26,6 +26,10 @@ public class HashCalculator {
 
     public static HashMap<String, Double> mixTwoDoubleHash(HashMap<String, Double> firstHash,
                                                     HashMap<String, Double> secondHash) {
+        if (firstHash == null) {
+            return secondHash;
+        }
+
         secondHash.keySet().forEach(key-> {
             if (firstHash.containsKey(key)) {
                 firstHash.replace(key, firstHash.get(key) + secondHash.get(key));
@@ -48,6 +52,7 @@ public class HashCalculator {
         arrOfDays.forEach(day->
             day.getCountStudiosPerDay().keySet().forEach(studio -> {
                 StudioHoldsDays[] daysList;
+
                 if (arrOfStudios.get(studio) == null) {
                     daysList = new StudioHoldsDays[sizeOfMonth];
                     daysList[0] = new StudioHoldsDays("", studio);
@@ -84,5 +89,15 @@ public class HashCalculator {
         }
 
         return sortedByValue;
+    }
+
+    public static Map<String, ? extends Number> adaptHash(Map<String, ? extends Number> map) {
+        HashMap<String, Number> adaptMap = new LinkedHashMap<>(map);
+        double sum = map.values().stream().mapToDouble(val -> Double.parseDouble(val.toString())).sum();
+
+        adaptMap.put("", null);
+        adaptMap.put("סיכום", sum);
+
+        return adaptMap;
     }
 }

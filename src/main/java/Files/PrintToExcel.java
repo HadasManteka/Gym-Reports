@@ -64,7 +64,7 @@ public class PrintToExcel {
     }
 
 
-    public void writeMap(Map<String, ? extends Object> data, String sheetName) {
+    public void writeMap(Map<String, ?> data, String sheetName) {
         XSSFSheet spreadsheet = workbook.createSheet(sheetName);
         XSSFRow row;
 
@@ -80,7 +80,7 @@ public class PrintToExcel {
             cell.setCellValue(key);
 
             cell = row.createCell(cellId);
-            cell.setCellValue(String.valueOf(data.get(key)));
+            cell.setCellValue(String.valueOf(data.get(key)== null ? "" : data.get(key)));
         }
 
         sheetNum++;

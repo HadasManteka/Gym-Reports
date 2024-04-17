@@ -12,6 +12,7 @@ import util.TimeCalculation;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WeeklyShiftsOrganizer extends ReportOrganizer {
@@ -84,7 +85,7 @@ public class WeeklyShiftsOrganizer extends ReportOrganizer {
         XSSFCell cell;
         boolean keep = true;
         int rows = sheet.getPhysicalNumberOfRows();
-        int saturdayColIndex = -1;
+        ArrayList<Integer> holidayColIndexes = new ArrayList<>();
 
         for (int r = 0; r < rows && keep; r++) {
             row = sheet.getRow(r);
@@ -98,13 +99,13 @@ public class WeeklyShiftsOrganizer extends ReportOrganizer {
                         } else if (cell.toString().contains("ראשון")) {
                             sundayColIndex = c;
                             sundayRowIndex = r;
-                        } else if (cell.toString().contains("שבת")) {
-                            saturdayColIndex = c;
+                        } else if (cell.toString().contains("שבת") || cell.toString().contains("חג")) {
+                            holidayColIndexes.add(c);
                         } else if (TimeCalculation.isHours(cell.toString())) {
                             String workerName = sheet.getRow(r + 1).getCell(c).toString().trim();
                             double timeToAdd = TimeCalculation.calcTimeBetweenHours(cell.toString());
-                            if (c == saturdayColIndex) {
-                                workerName = workerName + " - סופש";
+                            if (holidayColIndexes.contains(c)) {
+                                workerName = workerName + " - חג";
                             }
 
                             hoursPerEmployeeMap.put(workerName, hoursPerEmployeeMap.get(workerName) != null ?
